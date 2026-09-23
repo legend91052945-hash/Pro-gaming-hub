@@ -24,33 +24,41 @@ document.querySelectorAll('.tilt').forEach(c=>{c.onmousemove=e=>{let r=c.getBoun
 let ob=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');e.target.querySelectorAll('.counter').forEach(c=>{let t=+c.dataset.target,n=0;let q=setInterval(()=>{n=Math.min(t,n+Math.max(1,Math.ceil(t/35)));c.textContent=n.toLocaleString()+(t>100?' XP':'');if(n>=t)clearInterval(q)},25)})}}),{threshold:.15});document.querySelectorAll('.reveal').forEach(x=>ob.observe(x));
 </script></body></html>
 <div class="games">
-    <h2>🎮 My Games</h2>
+    <a class="card" href="games/tic-tac-toe.html">
+    <div class="body">
+        <b class="tag">ARCADE</b>
+        <h3>❌⭕ Tic-Tac-Toe</h3>
+        <p>Challenge your friend in Tic-Tac-Toe.</p>
+    </div>
+</a>
 
-    <a href="games/shooting.html">🔫 Shooting Game</a>
+<a class="card" href="games/racing.html">
+    <div class="body">
+        <b class="tag">RACING</b>
+        <h3>🏎️ Racing Game</h3>
+        <p>Dodge traffic and beat your high score.</p>
+    </div>
+</a>
+<section id="games" class="reveal">
+    <h2 class="title">🔥 Featured <span>Games</span></h2>
 
-    <a href="games/tic-tac-toe.html">❌⭕ Tic-Tac-Toe</a>
+    <div class="games">
 
-    <a href="games/racing.html">🏎️ Racing Game</a>
-</div>
-<style>
-.games {
-    text-align: center;
-    margin: 40px;
-}
+        <a class="card" href="games/tic-tac-toe.html">
+            <div class="body">
+                <b class="tag">ARCADE</b>
+                <h3>❌⭕ Tic-Tac-Toe</h3>
+                <p>Challenge your friend in Tic-Tac-Toe.</p>
+            </div>
+        </a>
 
-.games a {
-    display: inline-block;
-    margin: 10px;
-    padding: 15px 25px;
-    background: #2563eb;
-    color: white;
-    text-decoration: none;
-    border-radius: 10px;
-    font-weight: bold;
-}
+        <a class="card" href="games/racing.html">
+            <div class="body">
+                <b class="tag">RACING</b>
+                <h3>🏎️ Racing Game</h3>
+                <p>Dodge traffic and beat your high score.</p>
+            </div>
+        </a>
 
-.games a:hover {
-    background: #1d4ed8;
-}
-</style>
-    
+    </div>
+</section>
