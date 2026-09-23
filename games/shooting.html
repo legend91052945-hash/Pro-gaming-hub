@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Target Blaster</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #111827;
+        color: white;
+        font-family: Arial, sans-serif;
+    }
+
+    .game {
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+        padding: 20px;
+    }
+
+    h1 {
+        color: #38bdf8;
+    }
+
+    .info {
+        display: flex;
+        justify-content: space-around;
+        margin: 15px;
+        font-size: 20px;
+    }
+
+    canvas {
+        width: 100%;
+        max-width: 400px;
+        border: 3px solid #38bdf8;
+        border-radius: 12px;
+        background: #020617;
+        cursor: crosshair;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        background: #38bdf8;
+        color: #082f49;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #7dd3fc;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="game">
+    <h1>🔫 Target Blaster</h1>
+
+    <div class="info">
+        <span>Score: <b id="score">0</b></span>
+        <span>Time: <b id="time">30</b></span>
+    </div>
+
+    <canvas id="gameCanvas" width="400" height="500"></canvas>
+
+    <br>
+    <button onclick="startGame()">Start Game</button>
+</div>
+
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let score = 0;
+let time = 30;
+let target = null;
+let gameRunning = false;
+let timer;
+
+function createTarget() {
+    const radius = Math.max(15, 30 - score * 0.3);
+
+    target = {
+        x: radius + Math.random() * (canvas.width - radius * 2),
+        y: radius + Math.random() * (canvas.height - radius * 2),
+        radius: radius
+    };
+
+    draw();
+}
+
+function draw() {
+    ctx.fillStyle = "#020617";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    if (!target) return;
+
+    // Outer circle
+    ctx.beginPath();
+    ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
+    ctx.fillStyle = "#ef4444";
+    ctx.fill();
+
+    // Middle circle
+    ctx.beginPath();
+    ctx.arc(target.x, target.y, target.radius * 0.6, 0, Math.PI * 2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+
+    // Center
+    ctx.beginPath();
+    ctx.arc(target.x, target.y, target.radius * 0.25, 0, Math.PI * 2);
+    ctx.fillStyle = "#ef4444";
+    ctx.fill();
+}
+
+canvas.addEventListener("click", function(event) {
+    if (!gameRunning || !target) return;
+
+    const rect = canvas.getBoundingClientRect();
+
+    const x = (event.clientX - rect.left) *
+              canvas.width / rect.width;
+
+    const y = (event.clientY - rect.top) *
+              canvas.height / rect.height;
+
+    const distance = Math.sqrt(
+        (x - target.x) ** 2 +
+        (y - target.y) ** 2
+    );
+
+    if (distance <= target.radius) {
+        score++;
+        document.getElementById("score").textContent = score;
+        createTarget();
+    }
+});
+
+function startGame() {
+    clearInterval(timer);
+
+    score = 0;
+    time = 30;
+    gameRunning = true;
+
+    document.getElementById("score").textContent = score;
+    document.getElementById("time").textContent = time;
+
+    createTarget();
+
+    timer = setInterval(() => {
+        time--;
+
+        document.getElementById("time").textContent = time;
+
+        if (time <= 0) {
+            clearInterval(timer);
+            gameRunning = false;
+            target = null;
+            draw();
+
+            alert("Game Over!\nYour score: " + score);
+        }
+    }, 1000);
+}
+
+draw();
+</script>
+
+</body>
+</html>
