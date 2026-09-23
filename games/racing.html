@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Road Racer</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #111827;
+        color: white;
+        font-family: Arial, sans-serif;
+    }
+
+    .game {
+        text-align: center;
+        width: 100%;
+        max-width: 450px;
+        padding: 20px;
+    }
+
+    h1 {
+        color: #facc15;
+    }
+
+    .score {
+        font-size: 20px;
+        margin: 10px;
+    }
+
+    canvas {
+        width: 100%;
+        max-width: 360px;
+        border: 3px solid #facc15;
+        border-radius: 10px;
+        background: #333;
+    }
+
+    button {
+        padding: 12px 18px;
+        margin: 8px 4px;
+        border: none;
+        border-radius: 8px;
+        background: #facc15;
+        color: #422006;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <h1>🏎️ Road Racer</h1>
+
+    <div class="score">
+        Score: <b id="score">0</b>
+    </div>
+
+    <canvas id="canvas" width="360" height="500"></canvas>
+
+    <br>
+
+    <button onclick="startGame()">Start / Restart</button>
+
+    <div>
+        <button
+            onmousedown="left = true"
+            onmouseup="left = false"
+            ontouchstart="left = true"
+            ontouchend="left = false">
+            ◀ LEFT
+        </button>
+
+        <button
+            onmousedown="right = true"
+            onmouseup="right = false"
+            ontouchstart="right = true"
+            ontouchend="right = false">
+            RIGHT ▶
+        </button>
+    </div>
+
+    <p>Use ← → keys or the buttons.</p>
+
+</div>
+
+<script>
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let player;
+let enemies = [];
+let score = 0;
+let running = false;
+let left = false;
+let right = false;
+let animation;
+
+document.addEventListener("keydown", function(e) {
+
+    if (e.key === "ArrowLeft") {
+        left = true;
+    }
+
+    if (e.key === "ArrowRight") {
+        right = true;
+    }
+
+});
+
+document.addEventListener("keyup", function(e) {
+
+    if (e.key === "ArrowLeft") {
+        left = false;
+    }
+
+    if (e.key === "ArrowRight") {
+        right = false;
+    }
+
+});
+
+function startGame() {
+
+    cancelAnimationFrame(animation);
+
+    player = {
+        x: 165,
+        y: 420,
+        width: 30,
+        height: 50
+    };
+
+    enemies = [];
+    score = 0;
+    running = true;
+
+    document.getElementById("score").textContent = score;
+
+    gameLoop();
+}
+
+function createEnemy() {
+
+    const lanes = [70, 165, 260];
+
+    enemies.push({
+        x: lanes[Math.floor(Math.random() * lanes.length)],
+        y: -60,
+        width: 30,
+        height: 50,
+        speed: 4 + score / 1000
+    });
+}
+
+function collision(a, b) {
+
+    return (
+        a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y
+    );
+}
+
+function drawRoad() {
+
+    // Grass
+    ctx.fillStyle = "#166534";
+    ctx.fillRect(0, 0, 360, 500);
+
+    // Road
+    ctx.fillStyle = "#374151";
+    ctx.fillRect(45, 0, 270, 500);
+
+    // Road lines
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([25, 20]);
+
+    ctx.beginPath();
+    ctx.moveTo(135, 0);
+    ctx.lineTo(135, 500);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(225, 0);
+    ctx.lineTo(225, 500);
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+}
+
+function drawPlayer() {
+
+    ctx.fillStyle = "#22c55e";
+    ctx.fillRect(
+        player.x,
+        player.y,
+        player.width,
+        player.height
+    );
+
+    ctx.fillStyle = "#111827";
+
+    ctx.fillRect(
+        player.x + 5,
+        player.y + 8,
+        20,
+        12
+    );
+
+    ctx.fillRect(
+        player.x + 5,
+        player.y + 30,
+        20,
+        12
+    );
+}
+
+function drawEnemies() {
+
+    enemies.forEach(enemy => {
+
+        ctx.fillStyle = "#ef4444";
+
+        ctx.fillRect(
+            enemy.x,
+            enemy.y,
+            enemy.width,
+            enemy.height
+        );
+
+        ctx.fillStyle = "#111827";
+
+        ctx.fillRect(
+            enemy.x + 5,
+            enemy.y + 8,
+            20,
+            12
+        );
+
+        ctx.fillRect(
+            enemy.x + 5,
+            enemy.y + 30,
+            20,
+            12
+        );
+
+    });
+}
+
+function gameLoop() {
+
+    if (!running) return;
+
+    drawRoad();
+
+    // Player movement
+    if (left) {
+        player.x -= 5;
+    }
+
+    if (right) {
+        player.x += 5;
+    }
+
+    // Keep player on road
+    player.x = Math.max(
+        50,
+        Math.min(280, player.x)
+    );
+
+    // Create enemies
+    if (Math.random() < 0.025) {
+        createEnemy();
+    }
+
+    // Move enemies
+    enemies.forEach(enemy => {
+        enemy.y += enemy.speed;
+    });
+
+    // Remove enemies
+    enemies = enemies.filter(enemy => enemy.y < 520);
+
+    drawPlayer();
+    drawEnemies();
+
+    // Collision detection
+    for (let enemy of enemies) {
+
+        if (collision(player, enemy)) {
+
+            running = false;
+
+            alert(
+                "💥 Crash!\nYour score: " + score
+            );
+
+            return;
+        }
+    }
+
+    score++;
+
+    document.getElementById("score").textContent =
+        score;
+
+    animation = requestAnimationFrame(gameLoop);
+}
+
+drawRoad();
+
+</script>
+
+</body>
+</html>
