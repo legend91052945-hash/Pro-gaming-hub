@@ -11,9 +11,38 @@ section{padding:90px 8%;position:relative}.title{font-size:38px;margin-bottom:35
 <div id="particles"></div><header><div class="logo">🎮 <b>PRO</b> GAMING HUB</div><nav><a href="#games">Games</a><a href="#ranks">Ranks</a><a href="#about">About</a></nav></header>
 <section class="hero"><div class="grid"></div><div class="hero-content"><div class="badge">⚡ V3 • NEXT LEVEL</div><h1>PLAY.<br><span style="color:#00e5ff">DOMINATE.</span></h1><p>A futuristic gaming hub with animated particles, glowing effects, interactive cards and XP counters.</p><a class="btn" href="#games">EXPLORE GAMES</a><a class="btn alt" href="#ranks">VIEW RANKS</a></div></section>
 <section id="games" class="reveal"><h2 class="title">🔥 Featured <span>Games</span></h2><div class="games">
-<article class="card tilt"><img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=900&q=80"><div class="body"><b class="tag">ACTION</b><h3>Battle Arena</h3><p>Compete, survive and climb the ranks.</p></div></article>
-<article class="card tilt"><img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=900&q=80"><div class="body"><b class="tag">RACING</b><h3>Racing Legends</h3><p>Race at full speed for the top spot.</p></div></article>
-<article class="card tilt"><img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=900&q=80"><div class="body"><b class="tag">ADVENTURE</b><h3>Cyber Quest</h3><p>Explore a futuristic world of challenges.</p></div></article></div></section>
+<section id="games" class="reveal">
+    <h2 class="title">🔥 Featured <span>Games</span></h2>
+
+    <div class="games">
+
+        <a class="card tilt" href="games/tic-tac-toe.html">
+            <div class="body">
+                <b class="tag">ARCADE</b>
+                <h3>❌⭕ Tic-Tac-Toe</h3>
+                <p>Challenge your friend in Tic-Tac-Toe.</p>
+            </div>
+        </a>
+
+        <a class="card tilt" href="games/racing.html">
+            <div class="body">
+                <b class="tag">RACING</b>
+                <h3>🏎️ Racing Game</h3>
+                <p>Dodge traffic and beat your high score.</p>
+            </div>
+        </a>
+
+        <article class="card tilt">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=900&q=80">
+            <div class="body">
+                <b class="tag">ACTION</b>
+                <h3>Battle Arena</h3>
+                <p>Compete, survive and climb the ranks.</p>
+            </div>
+        </article>
+
+    </div>
+</section>
 <section id="ranks" class="reveal"><h2 class="title">🏆 Top <span>Players</span></h2>
 <div class="player"><span>🥇 ShadowX</span><span class="xp counter" data-target="9850">0 XP</span></div><div class="player"><span>🥈 DragonPro</span><span class="xp counter" data-target="8920">0 XP</span></div><div class="player"><span>🥉 GamerKing</span><span class="xp counter" data-target="8450">0 XP</span></div><div class="player"><span>4️⃣ NightWolf</span><span class="xp counter" data-target="7980">0 XP</span></div>
 <div class="stats"><div class="stat"><strong class="counter" data-target="3">0</strong>Featured Games</div><div class="stat"><strong class="counter" data-target="4">0</strong>Top Players</div><div class="stat"><strong>∞</strong>Gaming Fun</div></div></section>
@@ -23,42 +52,3 @@ const p=document.getElementById('particles');for(let i=0;i<45;i++){let x=documen
 document.querySelectorAll('.tilt').forEach(c=>{c.onmousemove=e=>{let r=c.getBoundingClientRect(),x=e.clientX/r.width-r.left/r.width-.5,y=e.clientY/r.height-r.top/r.height-.5;c.style.transform=`perspective(700px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateY(-8px)`};c.onmouseleave=()=>c.style.transform='' });
 let ob=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');e.target.querySelectorAll('.counter').forEach(c=>{let t=+c.dataset.target,n=0;let q=setInterval(()=>{n=Math.min(t,n+Math.max(1,Math.ceil(t/35)));c.textContent=n.toLocaleString()+(t>100?' XP':'');if(n>=t)clearInterval(q)},25)})}}),{threshold:.15});document.querySelectorAll('.reveal').forEach(x=>ob.observe(x));
 </script></body></html>
-<div class="games">
-    <a class="card" href="games/tic-tac-toe.html">
-    <div class="body">
-        <b class="tag">ARCADE</b>
-        <h3>❌⭕ Tic-Tac-Toe</h3>
-        <p>Challenge your friend in Tic-Tac-Toe.</p>
-    </div>
-</a>
-
-<a class="card" href="games/racing.html">
-    <div class="body">
-        <b class="tag">RACING</b>
-        <h3>🏎️ Racing Game</h3>
-        <p>Dodge traffic and beat your high score.</p>
-    </div>
-</a>
-<section id="games" class="reveal">
-    <h2 class="title">🔥 Featured <span>Games</span></h2>
-
-    <div class="games">
-
-        <a class="card" href="games/tic-tac-toe.html">
-            <div class="body">
-                <b class="tag">ARCADE</b>
-                <h3>❌⭕ Tic-Tac-Toe</h3>
-                <p>Challenge your friend in Tic-Tac-Toe.</p>
-            </div>
-        </a>
-
-        <a class="card" href="games/racing.html">
-            <div class="body">
-                <b class="tag">RACING</b>
-                <h3>🏎️ Racing Game</h3>
-                <p>Dodge traffic and beat your high score.</p>
-            </div>
-        </a>
-
-    </div>
-</section>
